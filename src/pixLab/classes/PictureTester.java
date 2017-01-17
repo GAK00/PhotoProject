@@ -16,6 +16,18 @@ public class PictureTester
     beach.explore();
     beach.zeroBlue();
     beach.explore();
+    beach = new Picture("beach.jpg");
+    beach.explore();
+    beach.onlyBlue();
+    beach.explore();
+    beach = new Picture("beach.jpg");
+    beach.explore();
+    beach.negate();
+    beach.explore();
+    beach = new Picture("beach.jpg");
+    beach.explore();
+    beach.greyScale();
+    beach.explore();
   }
   
   /** Method to test mirrorVertical */
@@ -51,7 +63,37 @@ public class PictureTester
     swan.edgeDetection(10);
     swan.explore();
   }
-  
+  public static void testMirrorVerticalRightToLeft()
+  {
+	  String registry = "kitten2.jpg";
+	  Picture kola = new Picture(registry);
+	  kola.explore();
+	  kola.mirrorVerticalRightToLeft();
+	  kola.explore();
+	  kola = new Picture(registry);
+	  kola.mirrorHorizontaBottomToTop();
+	  kola.explore();
+	  kola = new Picture(registry);
+	  kola.mirrorHorizontaTopToBottom();
+	  kola.explore();
+	  kola = new Picture(registry);
+	  kola.mirrorVerticalRightToLeft();
+	  kola.explore();
+	  kola = new Picture(registry);
+	  kola.mirrorVerticalRightToLeft();
+	  kola.mirrorHorizontaTopToBottom();
+	  kola.mirrorVertical();
+	  kola.explore();
+	  kola.write("/Users/gkun9931/Desktop/Pictures/dankoala.jpg");
+  }
+  public static void testFixUnderwater()
+  {
+	  Picture water = new Picture("redMotorcycle"
+	  		+ ".jpg");
+	  water.explore();
+	  water.fixWater();
+	  water.explore();
+  }
   /** Main method for testing.  Every class can have a main
     * method in Java */
   public static void main(String[] args)
@@ -59,14 +101,14 @@ public class PictureTester
     // uncomment a call here to run a test
     // and comment out the ones you don't want
     // to run
-    testZeroBlue();
+    //testZeroBlue();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
     //testNegate();
     //testGrayscale();
-    //testFixUnderwater();
-    testMirrorVertical();
+    testFixUnderwater();
+    //testMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
     //testMirrorGull();
@@ -81,5 +123,6 @@ public class PictureTester
     //testSetRedToHalfValueInTopHalf();
     //testClearBlueOverValue(200);
     //testGetAverageForColumn(0);
+	 //  testMirrorVerticalRightToLeft();
   }
 }
