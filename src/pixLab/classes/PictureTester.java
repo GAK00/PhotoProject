@@ -86,6 +86,33 @@ public class PictureTester
 	  kola.explore();
 	  kola.write("/Users/gkun9931/Desktop/Pictures/dankoala.jpg");
   }
+  
+  public static void testDiagonal()
+  {
+	  String registry = "redMotorcycle.jpg";
+//	  Picture picture = new Picture(registry);
+//	  picture.explore();
+//	  picture.mirrorDiagonalRightBottomToTop();
+//	  picture.explore();
+//	  picture.explore();
+//	  picture.mirrorDiagonalTopToBottom();
+//	  picture.explore();
+//	  picture = new Picture(registry);
+//	  picture.mirrorDiagonalBottomToTop();
+//	  picture.explore();
+//
+	 Picture picture = new Picture(registry);
+	  picture.mirrorDiagonalBottomToTop();
+	  picture.mirrorDiagonalRightTopToBottom();
+	  picture.mirrorVertical();
+	  picture.mirrorDiagonalTopToBottom();
+	  picture.mirrorHorizontaBottomToTop();
+	  picture.mirrorVerticalRightToLeft();
+	  picture.greyScale();
+	  picture.negate();
+	  picture.explore();
+  }
+  
   public static void testFixUnderwater()
   {
 	  Picture water = new Picture("redMotorcycle"
@@ -107,7 +134,8 @@ public class PictureTester
     //testKeepOnlyGreen();
     //testNegate();
     //testGrayscale();
-    testFixUnderwater();
+    //testFixUnderwater();
+	  testDiagonal();
     //testMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();

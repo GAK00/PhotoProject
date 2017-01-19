@@ -146,38 +146,139 @@ public class Picture extends SimplePicture
 	}
 
 	public void mirrorHorizontaBottomToTop()
-  {
-	  Pixel[][] pixels = this.getPixels2D();
-	  Pixel topPixel = null;
-	  Pixel bottomPixel = null;
-	  int height = pixels.length-1;
-	  for(int col= 0;col<pixels[0].length;col++){
-	  for(int row = height/2;row<=height;row++)
-	  {
-		  
-		  bottomPixel = pixels[row][col];
-		  topPixel = pixels[height-row][col];
-		  topPixel.setColor(bottomPixel.getColor());
-		  }
-	  }
-  }
-	
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length - 1;
+		for (int col = 0; col < pixels[0].length; col++)
+		{
+			for (int row = height / 2; row <= height; row++)
+			{
+
+				bottomPixel = pixels[row][col];
+				topPixel = pixels[height - row][col];
+				topPixel.setColor(bottomPixel.getColor());
+			}
+		}
+	}
+
 	public void mirrorHorizontaTopToBottom()
-	  {
-		  Pixel[][] pixels = this.getPixels2D();
-		  Pixel topPixel = null;
-		  Pixel bottomPixel = null;
-		  int height = pixels.length-1;
-		  for(int col= 0;col<pixels[0].length;col++){
-		  for(int row = height/2;row<=height;row++)
-		  {
-			  
-			  bottomPixel = pixels[row][col];
-			  topPixel = pixels[height-row][col];
-			  bottomPixel.setColor(topPixel.getColor());
-			  }
-		  }
-	  }
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length - 1;
+		for (int col = 0; col < pixels[0].length; col++)
+		{
+			for (int row = height / 2; row <= height; row++)
+			{
+
+				bottomPixel = pixels[row][col];
+				topPixel = pixels[height - row][col];
+				bottomPixel.setColor(topPixel.getColor());
+			}
+		}
+	}
+
+	public void mirrorDiagonalTopToBottom()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length - 1;
+		for (int row = 0; row < height; row++)
+		{
+			for (int col = 0; col <= pixels[0].length; col++)
+			{
+
+				if (col != row && col <= height && row <= pixels[0].length && row < col)
+				{
+					//System.out.println(row + "," + col);
+					bottomPixel = pixels[col][row];
+					topPixel = pixels[row][col];
+					bottomPixel.setColor(topPixel.getColor());
+				}
+
+			}
+		}
+	}
+
+	public void mirrorDiagonalBottomToTop()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length;
+		for (int row = 0; row < height; row++)
+		{
+			for (int col = 0; col <= pixels[0].length; col++)
+			{
+
+				if (col != row && col < height && row < pixels[0].length && row > col)
+				{
+					//System.out.println(row + "," + col);
+					bottomPixel = pixels[col][row];
+					topPixel = pixels[row][col];
+					bottomPixel.setColor(topPixel.getColor());
+				}
+
+			}
+		}
+	}
+
+	public void mirrorDiagonalRightTopToBottom()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length;
+
+		int length = height - 1;
+		if (pixels[0].length < height)
+		{
+			length = pixels[0].length - 1;
+		}
+		for (int row = 0; row < height; row++)
+		{
+			for (int col = 0; col <= pixels[0].length; col++)
+			{
+
+				if (col + row != length && col < length && row < length && length - row > col)
+				{
+					//System.out.println(row + "," + col);
+					bottomPixel = pixels[length - col][length - row];
+					topPixel = pixels[row][col];
+					bottomPixel.setColor(topPixel.getColor());
+				}
+
+			}
+		}
+	}
+
+	public void mirrorDiagonalRightBottomToTop()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel topPixel = null;
+		Pixel bottomPixel = null;
+		int height = pixels.length;
+		int length = Math.min(height-1, pixels[0].length-1);
+		for (int row = 0; row < height; row++)
+		{
+			for (int col = 0; col <= pixels[0].length; col++)
+			{
+
+				if (col + row != length && col < length && row < length && length - row < col)
+				{
+					System.out.println(row + "," + col);
+					bottomPixel = pixels[length - col][length - row];
+					topPixel = pixels[row][col];
+					bottomPixel.setColor(topPixel.getColor());
+				}
+
+			}
+		}
+	}
 
 	/** Mirror just part of a picture of a temple */
 	public void mirrorTemple()
@@ -201,6 +302,7 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+
 	public void onlyBlue()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -213,6 +315,7 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+
 	public void negate()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -220,13 +323,13 @@ public class Picture extends SimplePicture
 		{
 			for (Pixel pixelObj : rowArray)
 			{
-				pixelObj.setBlue(255-pixelObj.getBlue());
-				pixelObj.setGreen(255-pixelObj.getGreen());
-				pixelObj.setRed(255-pixelObj.getRed());
+				pixelObj.setBlue(255 - pixelObj.getBlue());
+				pixelObj.setGreen(255 - pixelObj.getGreen());
+				pixelObj.setRed(255 - pixelObj.getRed());
 			}
 		}
 	}
-	
+
 	public void greyScale()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -234,13 +337,14 @@ public class Picture extends SimplePicture
 		{
 			for (Pixel pixelObj : rowArray)
 			{
-				int newColorValue = (pixelObj.getBlue()+pixelObj.getGreen()+pixelObj.getRed())/3;
+				int newColorValue = (pixelObj.getBlue() + pixelObj.getGreen() + pixelObj.getRed()) / 3;
 				pixelObj.setBlue(newColorValue);
 				pixelObj.setGreen(newColorValue);
 				pixelObj.setRed(newColorValue);
 			}
 		}
 	}
+
 	public void fixWater()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -248,55 +352,49 @@ public class Picture extends SimplePicture
 		{
 			for (Pixel pixelObj : rowArray)
 			{
-				if(Math.abs(pixelObj.getGreen()-pixelObj.getBlue())<3)
+				if (Math.abs(pixelObj.getGreen() - pixelObj.getBlue()) < 3)
 				{
-					pixelObj.setGreen((int)(pixelObj.getGreen()/1.7));
-					pixelObj.setBlue((int)(pixelObj.getBlue()/1.7));
-				}
-				else if(pixelObj.getGreen()>pixelObj.getBlue()&&Math.abs(pixelObj.getGreen()-pixelObj.getBlue())<10)
+					pixelObj.setGreen((int) (pixelObj.getGreen() / 1.7));
+					pixelObj.setBlue((int) (pixelObj.getBlue() / 1.7));
+				} else if (pixelObj.getGreen() > pixelObj.getBlue() && Math.abs(pixelObj.getGreen() - pixelObj.getBlue()) < 10)
 				{
-					pixelObj.setGreen((int)(pixelObj.getGreen()/1.6));
-					pixelObj.setBlue((int)(pixelObj.getBlue()/1.7));
-				}
-				else if(Math.abs(pixelObj.getGreen()-pixelObj.getBlue())<10)
+					pixelObj.setGreen((int) (pixelObj.getGreen() / 1.6));
+					pixelObj.setBlue((int) (pixelObj.getBlue() / 1.7));
+				} else if (Math.abs(pixelObj.getGreen() - pixelObj.getBlue()) < 10)
 				{
-					pixelObj.setGreen((int)(pixelObj.getGreen()/1.7));
-					pixelObj.setBlue((int)(pixelObj.getBlue()/1.6));
-				}
-				else if(pixelObj.getGreen()>pixelObj.getBlue())
+					pixelObj.setGreen((int) (pixelObj.getGreen() / 1.7));
+					pixelObj.setBlue((int) (pixelObj.getBlue() / 1.6));
+				} else if (pixelObj.getGreen() > pixelObj.getBlue())
 				{
-					pixelObj.setGreen((int)(pixelObj.getGreen()/1.5));
-					pixelObj.setBlue((int)(pixelObj.getBlue()/1.7));
-				}
-				else
+					pixelObj.setGreen((int) (pixelObj.getGreen() / 1.5));
+					pixelObj.setBlue((int) (pixelObj.getBlue() / 1.7));
+				} else
 				{
-					pixelObj.setGreen((int)(pixelObj.getGreen()/1.7));
-					pixelObj.setBlue((int)(pixelObj.getBlue()/1.5));
+					pixelObj.setGreen((int) (pixelObj.getGreen() / 1.7));
+					pixelObj.setBlue((int) (pixelObj.getBlue() / 1.5));
 				}
-				
+
 				int max;
-				if(pixelObj.getRed()>pixelObj.getGreen()&&pixelObj.getRed()>pixelObj.getGreen())
+				if (pixelObj.getRed() > pixelObj.getGreen() && pixelObj.getRed() > pixelObj.getGreen())
 				{
-					max = 255-pixelObj.getRed();
-				}
-				else if(pixelObj.getGreen()>pixelObj.getBlue())
+					max = 255 - pixelObj.getRed();
+				} else if (pixelObj.getGreen() > pixelObj.getBlue())
 				{
-					max = 255-pixelObj.getGreen();
-				}
-				else
+					max = 255 - pixelObj.getGreen();
+				} else
 				{
-					max = 255-pixelObj.getBlue();
+					max = 255 - pixelObj.getBlue();
 				}
-				if(max>35)
+				if (max > 35)
 				{
 					max = 35;
 				}
-				pixelObj.setRed(pixelObj.getRed()+max);
-				pixelObj.setGreen(pixelObj.getGreen()+max);
-				pixelObj.setBlue(pixelObj.getBlue()+max);
+				pixelObj.setRed(pixelObj.getRed() + max);
+				pixelObj.setGreen(pixelObj.getGreen() + max);
+				pixelObj.setBlue(pixelObj.getBlue() + max);
 			}
-			}
-		
+		}
+
 	}
 
 	/**
