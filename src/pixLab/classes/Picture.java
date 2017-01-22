@@ -194,7 +194,7 @@ public class Picture extends SimplePicture
 
 				if (col != row && col <= height && row <= pixels[0].length && row < col)
 				{
-					//System.out.println(row + "," + col);
+					// System.out.println(row + "," + col);
 					bottomPixel = pixels[col][row];
 					topPixel = pixels[row][col];
 					bottomPixel.setColor(topPixel.getColor());
@@ -217,7 +217,7 @@ public class Picture extends SimplePicture
 
 				if (col != row && col < height && row < pixels[0].length && row > col)
 				{
-					//System.out.println(row + "," + col);
+					// System.out.println(row + "," + col);
 					bottomPixel = pixels[col][row];
 					topPixel = pixels[row][col];
 					bottomPixel.setColor(topPixel.getColor());
@@ -246,7 +246,7 @@ public class Picture extends SimplePicture
 
 				if (col + row != length && col < length && row < length && length - row > col)
 				{
-					//System.out.println(row + "," + col);
+					// System.out.println(row + "," + col);
 					bottomPixel = pixels[length - col][length - row];
 					topPixel = pixels[row][col];
 					bottomPixel.setColor(topPixel.getColor());
@@ -262,7 +262,7 @@ public class Picture extends SimplePicture
 		Pixel topPixel = null;
 		Pixel bottomPixel = null;
 		int height = pixels.length;
-		int length = Math.min(height-1, pixels[0].length-1);
+		int length = Math.min(height - 1, pixels[0].length - 1);
 		for (int row = 0; row < height; row++)
 		{
 			for (int col = 0; col <= pixels[0].length; col++)
@@ -286,7 +286,6 @@ public class Picture extends SimplePicture
 		int mirrorPoint = 276;
 		Pixel leftPixel = null;
 		Pixel rightPixel = null;
-		int count = 0;
 		Pixel[][] pixels = this.getPixels2D();
 
 		// loop through the rows
@@ -301,6 +300,86 @@ public class Picture extends SimplePicture
 				rightPixel.setColor(leftPixel.getColor());
 			}
 		}
+	}
+
+	public void customMirror(boolean isVertical, int startX, int startY, int endX, int endY, int[] ignoredColorRanges)
+	{
+		boolean isBad = false;
+		int mirrorDif = endX - startX;
+		if (isVertical)
+		{
+			System.out.println("ok");
+			mirrorDif = endY - startY;
+		}
+		Pixel orginalPixel = null;
+		Pixel copiedPixel = null;
+		Pixel[][] pixels = this.getPixels2D();
+		for (int row = startY; row <= endY; row++)
+		{
+			for (int col = startX; col <= endX; col++)
+			{
+				orginalPixel = pixels[row][col];
+				if (isVertical)
+				{
+					copiedPixel = pixels[(endY + mirrorDif) - (row - startY)][col];
+				} else
+				{
+					copiedPixel = pixels[row][(endX + mirrorDif) - (col - startX)];
+				}
+				if (ignoredColorRanges == null)
+				{
+					copiedPixel.setColor(orginalPixel.getColor());
+				} else
+				{
+					try
+					{
+						boolean ignore = testColorRange(orginalPixel.getColor(), ignoredColorRanges);
+						if (!ignore)
+						{
+							copiedPixel.setColor(orginalPixel.getColor());
+
+						}
+						else
+						{
+							System.out.println("ignored");
+						}
+					} catch (Exception e)
+					{
+						e.printStackTrace();
+						isBad = true;
+						break;
+						
+					}
+
+				}
+			}
+			if(isBad){
+			break;}
+		}
+	}
+
+	private boolean testColorRange(Color color, int[] colorRange) throws Exception
+	{
+		boolean isInColorRange = false;
+		if (colorRange.length % 2 == 0 && colorRange.length > 0)
+		{
+			for (int index = 0; index < colorRange.length; index += 2)
+			{
+				int rgbAdder = colorRange[index+1];
+				Color color1 = new Color(colorRange[index]);
+				Color rgbPlus = new Color((color1.getRed()+rgbAdder),(color1.getGreen()+rgbAdder),(color1.getBlue()+rgbAdder));
+				Color rgbMinus = new Color((color1.getRed()-rgbAdder),(color1.getGreen()-rgbAdder),(color1.getBlue()-rgbAdder));
+				if (rgbMinus.getRed()<color.getRed()&&rgbMinus.getGreen()<color.getGreen()&&rgbMinus.getBlue()<color.getBlue()&&rgbPlus.getRed()>color.getRed()&&rgbPlus.getGreen()>color.getGreen()&&rgbPlus.getBlue()>color.getBlue())
+				{
+					isInColorRange = true;
+				}
+				//else{}
+			}
+		} else
+		{
+			throw new Exception("invalid color Ranges");
+		}
+		return isInColorRange;
 	}
 
 	public void onlyBlue()

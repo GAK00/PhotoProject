@@ -1,4 +1,7 @@
 package pixLab.classes;
+
+import java.awt.Color;
+
 /**
  * This class contains class (static) methods
  * that will help you test the Picture class 
@@ -42,7 +45,7 @@ public class PictureTester
   /** Method to test mirrorTemple */
   public static void testMirrorTemple()
   {
-    Picture temple = new Picture("temple.jpg");
+    Picture temple = new Picture("beach.jpg");
     temple.explore();
     temple.mirrorTemple();
     temple.explore();
@@ -89,8 +92,8 @@ public class PictureTester
   
   public static void testDiagonal()
   {
-	  String registry = "redMotorcycle.jpg";
-//	  Picture picture = new Picture(registry);
+	  String registry = "koala'.jpg";
+//	  Picture picture = new Picte(registry);
 //	  picture.explore();
 //	  picture.mirrorDiagonalRightBottomToTop();
 //	  picture.explore();
@@ -105,12 +108,12 @@ public class PictureTester
 	  picture.mirrorDiagonalBottomToTop();
 	  picture.mirrorDiagonalRightTopToBottom();
 	  picture.mirrorVertical();
-	  picture.mirrorDiagonalTopToBottom();
-	  picture.mirrorHorizontaBottomToTop();
-	  picture.mirrorVerticalRightToLeft();
-	  picture.greyScale();
-	  picture.negate();
-	  picture.explore();
+//	  picture.mirrorDiagonalTopToBottom();
+//	  picture.mirrorHorizontaBottomToTop();
+//	  picture.mirrorVerticalRightToLeft();
+	 // picture.greyScale();
+//	  picture.negate();
+ picture.explore();
   }
   
   public static void testFixUnderwater()
@@ -135,7 +138,7 @@ public class PictureTester
     //testNegate();
     //testGrayscale();
     //testFixUnderwater();
-	  testDiagonal();
+	 testDiagonal();
     //testMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
@@ -153,4 +156,24 @@ public class PictureTester
     //testGetAverageForColumn(0);
 	 //  testMirrorVerticalRightToLeft();
   }
+
+private static void testMirrorArms()
+{
+	Picture snowMan = new Picture("snowman.jpg");
+	snowMan.explore();
+	snowMan.customMirror(true, 106, 155, 168, 191,null);
+	snowMan.customMirror(true, 237, 173, 297, 198,null);
+	snowMan.explore();
+	
+}
+
+private static void testMirrorGull()
+{
+	Picture gull = new Picture("seagull.jpg");
+	gull.explore();
+	int[] test = {new Color(109,116,126).getRGB(),10,new Color(171,157,144).getRGB(),20,new Color(150,144,130).getRGB(),20,new Color(102,113,119).getRGB(),8,new Color(110,115,118).getRGB(),8};
+	gull.customMirror(false, 234, 226, 346, 329,test);
+	gull.explore();
+	
+}
 }
