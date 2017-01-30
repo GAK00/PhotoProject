@@ -338,8 +338,7 @@ public class Picture extends SimplePicture
 						{
 							copiedPixel.setColor(orginalPixel.getColor());
 
-						}
-						else
+						} else
 						{
 							System.out.println("ignored");
 						}
@@ -348,13 +347,15 @@ public class Picture extends SimplePicture
 						e.printStackTrace();
 						isBad = true;
 						break;
-						
+
 					}
 
 				}
 			}
-			if(isBad){
-			break;}
+			if (isBad)
+			{
+				break;
+			}
 		}
 	}
 
@@ -365,15 +366,16 @@ public class Picture extends SimplePicture
 		{
 			for (int index = 0; index < colorRange.length; index += 2)
 			{
-				int rgbAdder = colorRange[index+1];
+				int rgbAdder = colorRange[index + 1];
 				Color color1 = new Color(colorRange[index]);
-				Color rgbPlus = new Color((color1.getRed()+rgbAdder),(color1.getGreen()+rgbAdder),(color1.getBlue()+rgbAdder));
-				Color rgbMinus = new Color((color1.getRed()-rgbAdder),(color1.getGreen()-rgbAdder),(color1.getBlue()-rgbAdder));
-				if (rgbMinus.getRed()<color.getRed()&&rgbMinus.getGreen()<color.getGreen()&&rgbMinus.getBlue()<color.getBlue()&&rgbPlus.getRed()>color.getRed()&&rgbPlus.getGreen()>color.getGreen()&&rgbPlus.getBlue()>color.getBlue())
+				Color rgbPlus = new Color((color1.getRed() + rgbAdder), (color1.getGreen() + rgbAdder), (color1.getBlue() + rgbAdder));
+				Color rgbMinus = new Color((color1.getRed() - rgbAdder), (color1.getGreen() - rgbAdder), (color1.getBlue() - rgbAdder));
+				if (rgbMinus.getRed() < color.getRed() && rgbMinus.getGreen() < color.getGreen() && rgbMinus.getBlue() < color.getBlue() && rgbPlus.getRed() > color.getRed()
+				        && rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
 				{
 					isInColorRange = true;
 				}
-				//else{}
+				// else{}
 			}
 		} else
 		{
@@ -422,6 +424,57 @@ public class Picture extends SimplePicture
 				pixelObj.setRed(newColorValue);
 			}
 		}
+	}
+
+	public void goDerp()
+	{
+		Random rand = new Random();
+		Pixel[][] pixels = this.getPixels2D();
+		int randomCoficient = 10;
+		Color lastColor = null;
+		for (Pixel[] rowArray : pixels)
+		{
+			for (Pixel pixelObj : rowArray)
+			{
+				Color currentColor = pixelObj.getColor();
+				int temp;
+				temp = randomCoficient;
+				if(lastColor!=null)
+				{
+					randomCoficient = Math.abs(rand.nextInt(temp*2+1)-lastColor.getRed());
+				}
+				int red= Math.abs(currentColor.getRed()+rand.nextInt(randomCoficient*2+1)-randomCoficient);
+				if(red>255)
+				{
+					red = 255;
+				}
+				randomCoficient = temp;
+				temp = randomCoficient;
+				if(lastColor!=null)
+				{
+					randomCoficient = Math.abs(rand.nextInt(temp*2+1)-lastColor.getGreen());
+				}
+				int green= Math.abs(currentColor.getGreen()+rand.nextInt(randomCoficient*2+1)-randomCoficient);
+				if(green>255)
+				{
+					green = 255;
+				}
+				randomCoficient = temp;
+				temp = randomCoficient;
+				if(lastColor!=null)
+				{
+					randomCoficient = Math.abs(rand.nextInt(temp*2+1)-lastColor.getBlue());
+				}
+				int blue= Math.abs(currentColor.getBlue()+rand.nextInt(randomCoficient*2+1)-randomCoficient);
+				if(blue>255)
+				{
+					blue = 255;
+				}
+				randomCoficient = temp;
+		Color color = new Color(red,green,blue);
+		lastColor = color;
+		pixelObj.setColor(color);
+			}}
 	}
 
 	public void fixWater()
@@ -503,6 +556,29 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+	public void copy(Picture fromPic, int startRow, int startCol,int endRow, int endCol,int toRow, int toCol)
+	{
+		Pixel fromPixel = null;
+		Pixel toPixel = null;
+		Pixel[][] toPixels = this.getPixels2D();
+		Pixel[][] fromPixels = fromPic.getPixels2D();
+		for (int fromRow = startRow; fromRow < endRow; fromRow++, toRow++)
+		{
+			for (int fromCol = startCol; fromCol <= endCol; fromCol++,toCol++)
+			{
+				fromPixel = fromPixels[fromRow][fromCol];
+				toPixel = toPixels[toRow][toCol];
+//				toRow++;
+//				toCol++;
+				toPixel.setColor(fromPixel.getColor());
+			}
+		}
+	}
+	
+	public void Coolage()
+	{
+		Picture SnowMan = new Picture("");
+	}
 
 	/** Method to create a collage of several pictures */
 	public void createCollage()
@@ -533,7 +609,7 @@ public class Picture extends SimplePicture
 		Pixel rightPixel = null;
 		Pixel[][] pixels = this.getPixels2D();
 		Color rightColor = null;
-		for (int row = 0; row < pixels.length; row++)
+		for (int row = 0; row < pixels.length - 1; row++)
 		{
 			for (int col = 0; col < pixels[0].length - 1; col++)
 			{
@@ -541,9 +617,46 @@ public class Picture extends SimplePicture
 				rightPixel = pixels[row][col + 1];
 				rightColor = rightPixel.getColor();
 				if (leftPixel.colorDistance(rightColor) > edgeDist)
+				{
 					leftPixel.setColor(Color.BLACK);
-				else
+				} else
+				{
 					leftPixel.setColor(Color.WHITE);
+				}
+			}
+		}
+	}
+
+	public void edgeDetection2(int edgeDist)
+	{
+		Pixel leftPixel = null;
+		Pixel rightPixel = null;
+		Pixel bottomPixel = null;
+		Pixel diagonalPixel = null;
+		Pixel[][] pixels = this.getPixels2D();
+		Color rightColor = null;
+		for (int row = 0; row < pixels.length - 1; row++)
+		{
+			for (int col = 0; col < pixels[0].length - 1; col++)
+			{
+				leftPixel = pixels[row][col];
+				rightPixel = pixels[row][col + 1];
+				bottomPixel = pixels[row + 1][col];
+				diagonalPixel = pixels[row + 1][col];
+				rightColor = rightPixel.getColor();
+				if (leftPixel.colorDistance(rightColor) > edgeDist)
+				{
+					leftPixel.setColor(Color.BLACK);
+				} else if (leftPixel.colorDistance(bottomPixel.getColor()) > edgeDist)
+				{
+					leftPixel.setColor(Color.BLACK);
+				} else if (leftPixel.colorDistance(diagonalPixel.getColor()) > edgeDist)
+				{
+					leftPixel.setColor(Color.BLACK);
+				} else
+				{
+					// leftPixel.setColor(Color.WHITE);
+				}
 			}
 		}
 	}

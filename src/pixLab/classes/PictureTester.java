@@ -92,7 +92,7 @@ public class PictureTester
   
   public static void testDiagonal()
   {
-	  String registry = "koala'.jpg";
+	  String registry = "redMotorcycle.jpg";
 //	  Picture picture = new Picte(registry);
 //	  picture.explore();
 //	  picture.mirrorDiagonalRightBottomToTop();
@@ -105,14 +105,18 @@ public class PictureTester
 //	  picture.explore();
 //
 	 Picture picture = new Picture(registry);
+	  picture.goDerp();
 	  picture.mirrorDiagonalBottomToTop();
 	  picture.mirrorDiagonalRightTopToBottom();
 	  picture.mirrorVertical();
-//	  picture.mirrorDiagonalTopToBottom();
-//	  picture.mirrorHorizontaBottomToTop();
-//	  picture.mirrorVerticalRightToLeft();
+	  picture.mirrorDiagonalTopToBottom();
+  picture.mirrorHorizontaBottomToTop();
+  picture.mirrorVerticalRightToLeft();
 	 // picture.greyScale();
 //	  picture.negate();
+
+
+	  picture.negate();
  picture.explore();
   }
   
@@ -138,7 +142,7 @@ public class PictureTester
     //testNegate();
     //testGrayscale();
     //testFixUnderwater();
-	 testDiagonal();
+	testDiagonal();
     //testMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
@@ -156,6 +160,16 @@ public class PictureTester
     //testGetAverageForColumn(0);
 	 //  testMirrorVerticalRightToLeft();
   }
+
+private static void testEdgeDetection2()
+{
+
+    Picture swan = new Picture("blueMotorcycle.jpg");
+//    swan.edgeDetection2(15);
+//    swan.explore();
+    swan.goDerp();
+    swan.explore();
+}
 
 private static void testMirrorArms()
 {
