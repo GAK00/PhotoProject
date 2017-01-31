@@ -338,8 +338,7 @@ public class Picture extends SimplePicture
 						{
 							copiedPixel.setColor(orginalPixel.getColor());
 
-						}
-						else
+						} else
 						{
 							System.out.println("ignored");
 						}
@@ -348,13 +347,15 @@ public class Picture extends SimplePicture
 						e.printStackTrace();
 						isBad = true;
 						break;
-						
+
 					}
 
 				}
 			}
-			if(isBad){
-			break;}
+			if (isBad)
+			{
+				break;
+			}
 		}
 	}
 
@@ -365,15 +366,16 @@ public class Picture extends SimplePicture
 		{
 			for (int index = 0; index < colorRange.length; index += 2)
 			{
-				int rgbAdder = colorRange[index+1];
+				int rgbAdder = colorRange[index + 1];
 				Color color1 = new Color(colorRange[index]);
-				Color rgbPlus = new Color((color1.getRed()+rgbAdder),(color1.getGreen()+rgbAdder),(color1.getBlue()+rgbAdder));
-				Color rgbMinus = new Color((color1.getRed()-rgbAdder),(color1.getGreen()-rgbAdder),(color1.getBlue()-rgbAdder));
-				if (rgbMinus.getRed()<color.getRed()&&rgbMinus.getGreen()<color.getGreen()&&rgbMinus.getBlue()<color.getBlue()&&rgbPlus.getRed()>color.getRed()&&rgbPlus.getGreen()>color.getGreen()&&rgbPlus.getBlue()>color.getBlue())
+				Color rgbPlus = new Color((color1.getRed() + rgbAdder), (color1.getGreen() + rgbAdder), (color1.getBlue() + rgbAdder));
+				Color rgbMinus = new Color((color1.getRed() - rgbAdder), (color1.getGreen() - rgbAdder), (color1.getBlue() - rgbAdder));
+				if (rgbMinus.getRed() < color.getRed() && rgbMinus.getGreen() < color.getGreen() && rgbMinus.getBlue() < color.getBlue() && rgbPlus.getRed() > color.getRed()
+						&& rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
 				{
 					isInColorRange = true;
 				}
-				//else{}
+				// else{}
 			}
 		} else
 		{
@@ -504,6 +506,26 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	public void copy(Picture fromPic, int startRow, int startCol, int endRow, int endCol,  int toRow,int toCol)
+	{
+		Pixel fromPixel = null;
+		Pixel toPixel = null;
+		Pixel[][] toPixels = this.getPixels2D();
+		Pixel[][] fromPixels = fromPic.getPixels2D();
+		int norm = toCol;
+		for (int fromRow =startRow; fromRow < endRow; fromRow++, toRow++)
+		{
+			for (int fromCol = startCol,toCol1=norm;  fromCol < endCol; fromCol++, toCol1++)
+			{
+				//System.out.println(fromCol+","+toCol);
+				//System.out.println(toCol);
+				fromPixel = fromPixels[fromRow][fromCol];
+				toPixel = toPixels[toRow][toCol1];
+				toPixel.setColor(fromPixel.getColor());
+			}
+		}
+	}
+
 	/** Method to create a collage of several pictures */
 	public void createCollage()
 	{
@@ -519,6 +541,42 @@ public class Picture extends SimplePicture
 		this.copy(flower2, 500, 0);
 		this.mirrorVertical();
 		this.write("collage.jpg");
+	}
+	
+	public void coolage()
+	{
+		Picture pic = new Picture("arch.jpg");
+		Picture pic2 = new Picture("femaleLionAndHall.jpg");
+		Picture pic3 = new Picture("koala.jpg");
+		Picture pic4 = new Picture("swan.jpg");
+		Picture pic5 = new Picture("temple.jpg");
+		for(int index =0;index<5;index++){
+		int[] pakaged = RandGenerate(pic.getHeight(),pic.getWidth());
+		copy(pic,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		pakaged = RandGenerate(pic3.getHeight(),pic3.getWidth());
+		copy(pic3,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		pakaged = RandGenerate(pic4.getHeight(),pic4.getWidth());
+		copy(pic4,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		pakaged = RandGenerate(pic5.getHeight(),pic5.getWidth());
+		copy(pic5,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		pakaged = RandGenerate(pic2.getHeight(),pic2.getWidth());
+		copy(pic2,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);}
+	}
+	
+	private int[] RandGenerate(int row,int col)
+	{
+		Random rand = new Random();
+		int fromStartRow = rand.nextInt(row);
+		int fromEndRow = rand.nextInt((row)-fromStartRow)+fromStartRow;
+		int fromStartCol = rand.nextInt(col);
+		int fromEndCol = rand.nextInt((col)-fromStartCol)+fromStartCol;
+		int toCol = rand.nextInt(635-(fromEndCol-fromStartCol));
+		
+		int toRow = rand.nextInt(477-(fromEndRow-fromStartRow));
+		int[] packaged = {fromStartRow,fromEndRow,fromStartCol,fromEndCol,toCol,toRow};
+		return packaged;
+		
+		
 	}
 
 	/**
