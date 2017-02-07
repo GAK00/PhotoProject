@@ -639,15 +639,15 @@ public class Picture extends SimplePicture
 		pic5.edgeDetection(line);
 		for(int index =0;index<10;index++){
 		int[] pakaged = RandGenerate(pic.getHeight(),pic.getWidth());
-		copyNoBlend(pic,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		copy(pic,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
 		pakaged = RandGenerate(pic3.getHeight(),pic3.getWidth());
-		copyNoBlend(pic3,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		copy(pic3,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
 		pakaged = RandGenerate(pic4.getHeight(),pic4.getWidth());
-		copyNoBlend(pic4,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		copy(pic4,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
 		pakaged = RandGenerate(pic5.getHeight(),pic5.getWidth());
-		copyNoBlend(pic5,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
+		copy(pic5,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
 		pakaged = RandGenerate(pic2.getHeight(),pic2.getWidth());
-		copyNoBlend(pic2,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);}
+		copy(pic2,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);}
 	}
 	
 	private int[] RandGenerate(int row,int col)
