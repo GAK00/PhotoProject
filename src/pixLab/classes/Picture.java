@@ -521,7 +521,13 @@ public class Picture extends SimplePicture
 				//System.out.println(toCol);
 				fromPixel = fromPixels[fromRow][fromCol];
 				toPixel = toPixels[toRow][toCol1];
-				toPixel.setColor(fromPixel.getColor());
+				if(toPixel.getColor().equals(Color.white)){
+					//System.out.println(toPixel.getColor());
+				toPixel.setColor(fromPixel.getColor());}
+				else{
+					//System.out.println("ok");
+					Color blend = new Color(((toPixel.getRed()+fromPixel.getRed())/2),((toPixel.getGreen()+fromPixel.getGreen())/2),((toPixel.getBlue()+fromPixel.getBlue())/2));
+					toPixel.setColor(blend);}
 			}
 		}
 	}
@@ -545,12 +551,18 @@ public class Picture extends SimplePicture
 	
 	public void coolage()
 	{
+		int line = 45;
 		Picture pic = new Picture("arch.jpg");
+		pic.edgeDetection(line);
 		Picture pic2 = new Picture("femaleLionAndHall.jpg");
+		pic2.edgeDetection(line);
 		Picture pic3 = new Picture("koala.jpg");
+		pic3.edgeDetection(line);
 		Picture pic4 = new Picture("swan.jpg");
+		pic4.edgeDetection(line);
 		Picture pic5 = new Picture("temple.jpg");
-		for(int index =0;index<5;index++){
+		pic5.edgeDetection(line);
+		for(int index =0;index<10;index++){
 		int[] pakaged = RandGenerate(pic.getHeight(),pic.getWidth());
 		copy(pic,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
 		pakaged = RandGenerate(pic3.getHeight(),pic3.getWidth());
@@ -600,8 +612,9 @@ public class Picture extends SimplePicture
 				rightColor = rightPixel.getColor();
 				if (leftPixel.colorDistance(rightColor) > edgeDist)
 					leftPixel.setColor(Color.BLACK);
-				else
-					leftPixel.setColor(Color.WHITE);
+				else{
+					//leftPixel.setColor(Color.WHITE);
+					}
 			}
 		}
 	}
