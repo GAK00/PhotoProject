@@ -1,10 +1,18 @@
 package pixLab.classes;
-import javax.imageio.ImageIO;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
-import java.awt.*;
-import java.io.*;
-import java.awt.geom.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 /**
  * A class that represents a simple picture.  A simple picture may have
@@ -529,7 +537,100 @@ public class SimplePicture implements DigitalPicture
    graphics2d.drawString(message,xPos,yPos);
    
  }
- 
+ public void addMessage(String message,int xPos, int yPos,String font, int fontStyle,Color textColor,int size, boolean IsTop) throws Exception
+ {
+	 ArrayList<String> words = new ArrayList<String>();
+	 Graphics2D graphics = bufferedImage.createGraphics();
+	 graphics.setColor(textColor);
+	 Font stringFont = new Font(font,fontStyle,size);
+	 graphics.setFont(stringFont);
+	 int width = graphics.getFontMetrics(stringFont).stringWidth(message);
+	 if(width>this.getWidth())
+	 {
+		 words = fancySplit(message,graphics,stringFont);
+	 }
+	 else
+	 {
+		 words.add(message);
+	 }
+
+	 int height = 0;
+	 for(String word : words)
+	 {
+		 height += graphics.getFontMetrics(stringFont).getHeight();
+	 }
+	 if(height>this.getHeight())
+	 {
+		 throw new ArrayIndexOutOfBoundsException("String will not fit");
+	 }
+	 for(int index = 0;index<words.size();index++){
+	 width = graphics.getFontMetrics(stringFont).stringWidth(words.get(index));
+	 int xPosition = xPos-(width/2);
+	 if(IsTop){
+	 yPos = ((height/words.size())*(index+1));}
+	 else
+	 {
+		 yPos = this.getHeight()-((height/words.size())*(words.size()-index));
+	 }
+	 graphics.drawString(words.get(index), xPosition, yPos);}
+	 graphics.dispose();
+	 
+ }
+ private ArrayList<String> fancySplit(String toSplit,Graphics2D graphics,Font font) throws Exception
+ {
+	 ArrayList<String> Ready = new ArrayList<String>();
+	 String[] split = toSplit.split(" ");
+	 if(split.length<2)
+	 {
+		 throw new Exception("String Cannot be wrapped");
+	 }
+	 else
+	 {
+		 int splitLength2 = (split.length/2);
+		 int splitLentgh = splitLength2 + (split.length%2);
+		 splitLength2 += splitLentgh;
+		 String string1 = "";
+		 for(int index =  0; index<splitLentgh; index++)
+		 {
+			 if(index == 0){
+				 string1 += split[index];}
+				 else
+				 {
+					 string1 += " " +split[index];
+				 }
+		 }
+		 String string2 = "";
+		 for(int index = splitLentgh; index<splitLength2; index++)
+		 {
+			 if(index == 0){
+			 string2 += split[index];}
+			 else
+			 {
+				 string2 += " " +split[index];
+			 }
+		 }
+		 int width = graphics.getFontMetrics(font).stringWidth(string1);
+		 if(width>this.getWidth())
+		 {
+			 Ready.addAll(fancySplit(string1,graphics,font));
+		 }
+		 else
+		 {
+			 Ready.add(string1);
+		 }
+		 width = graphics.getFontMetrics(font).stringWidth(string2);
+		 if(width>this.getWidth())
+		 {
+			 Ready.addAll(fancySplit(string2,graphics,font));
+		 }
+		 else
+		 {
+			 Ready.add(string2);
+		 }
+		 System.out.println(Ready);
+		 return Ready;
+	 }
+ }
  /**
   * Method to draw a string at the given location on the picture
   * @param text the text to draw

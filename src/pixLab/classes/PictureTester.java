@@ -173,8 +173,18 @@ public class PictureTester
     //testClearBlueOverValue(200);
     //testGetAverageForColumn(0);
 	 //  testMirrorVerticalRightToLeft();
-	  testCollage1();
+	 // testCollage1();
+	  testMeme();
   }
+
+private static void testMeme()
+{
+	Picture swan = new Picture("640X480.jpg");
+	swan.coolage();
+	
+	swan.makeMeme("Valantines is fun so this is a swan meme cause valintines", "Thats all i got you may go now. Really the meme is over, what are you still doing here go!", new Color(200,0,150),"Giddyup Std", 30,"DankMeme.jpg");
+	swan.explore();
+}
 
 private static void testEdgeDetection2()
 {

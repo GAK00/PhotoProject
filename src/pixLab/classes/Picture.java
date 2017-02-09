@@ -1,12 +1,9 @@
 package pixLab.classes;
 
-import java.awt.*;
-import java.awt.font.*;
-import java.awt.geom.*;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
-import java.text.*;
-import java.util.*;
-import java.util.List; // resolves problem with java.awt.List and java.util.List
+import java.util.Random;
 
 /**
  * A class that represents a picture. This class inherits from SimplePicture and
@@ -728,6 +725,28 @@ public class Picture extends SimplePicture
 				}
 
 			}
+		}
+	}
+	public void makeMeme(String topText, String botText,Color color,String font, int size)
+	{
+		try{
+		this.addMessage(topText, this.getWidth()/2, 0, font, Font.BOLD, color, size, true);
+		this.addMessage(botText, this.getWidth()/2, 0, font, Font.BOLD, color, size, false);}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void makeMeme(String topText, String botText,Color color,String font, int size,String name)
+	{
+		try{
+		this.addMessage(topText, this.getWidth()/2, 0, font, Font.BOLD, color, size, true);
+		this.addMessage(botText, this.getWidth()/2, 0, font, Font.BOLD, color, size, false);
+		this.write(name);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 
