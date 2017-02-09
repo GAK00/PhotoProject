@@ -628,15 +628,15 @@ public class Picture extends SimplePicture
 	{
 		int line = 45;
 		Picture pic = new Picture("arch.jpg");
-		pic.edgeDetection(line);
+		//pic.edgeDetection(line);
 		Picture pic2 = new Picture("femaleLionAndHall.jpg");
-		pic2.edgeDetection(line);
+		//pic2.edgeDetection(line);
 		Picture pic3 = new Picture("koala.jpg");
-		pic3.edgeDetection(line);
+		//pic3.edgeDetection(line);
 		Picture pic4 = new Picture("swan.jpg");
-		pic4.edgeDetection(line);
+		//pic4.edgeDetection(line);
 		Picture pic5 = new Picture("temple.jpg");
-		pic5.edgeDetection(line);
+		//pic5.edgeDetection(line);
 		for(int index =0;index<10;index++){
 		int[] pakaged = RandGenerate(pic.getHeight(),pic.getWidth());
 		copy(pic,pakaged[0],pakaged[2],pakaged[1],pakaged[3],pakaged[5],pakaged[4]);
