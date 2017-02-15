@@ -221,8 +221,11 @@ public class PictureTester
 
 	private static void testGlitch()
 	{
-		Picture toGlitch = new Picture("seagull.jpg");
-		toGlitch.Glitch(3);
+		Picture toGlitch = new Picture("swan.jpg");
+		toGlitch.goDerp();
+		for(int x =0;x<1;x++){
+		toGlitch.Glitch(7,0.15);}
+		
 		toGlitch.explore();
 	}
 }

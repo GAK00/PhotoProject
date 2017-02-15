@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class Picture extends SimplePicture
 {
-	private Pixel[][] pixels = this.getPixels2D();
+	private Pixel[][] pixels;
 	///////////////////// constructors //////////////////////////////////
 
 	/**
@@ -26,6 +26,7 @@ public class Picture extends SimplePicture
 		 * child constructors always call a parent constructor
 		 */
 		super();
+		pixels = this.getPixels2D();
 	}
 
 	/**
@@ -38,6 +39,7 @@ public class Picture extends SimplePicture
 	{
 		// let the parent class handle this fileName
 		super(fileName);
+		pixels = this.getPixels2D();
 	}
 
 	/**
@@ -52,6 +54,7 @@ public class Picture extends SimplePicture
 	{
 		// let the parent class handle this width and height
 		super(width, height);
+		pixels = this.getPixels2D();
 	}
 
 	/**
@@ -64,6 +67,7 @@ public class Picture extends SimplePicture
 	{
 		// let the parent class do the copy
 		super(copyPicture);
+		pixels = this.getPixels2D();
 	}
 
 	/**
@@ -75,6 +79,7 @@ public class Picture extends SimplePicture
 	public Picture(BufferedImage image)
 	{
 		super(image);
+		pixels = this.getPixels2D();
 	}
 
 	////////////////////// methods ///////////////////////////////////////
@@ -225,24 +230,27 @@ public class Picture extends SimplePicture
 		}
 	}
 
-	public void Glitch(int glitchness)
+	public void Glitch(int glitchness,double ratio)
 	{
+		int major = (int)(ratio*100);
+		if(major>100||major<0)
+		{
+			major = 100;
+		}
+		int minor = 100-major;
+		System.out.println(major +" , "+minor);
 		Pixel[][] pixels = this.getPixels2D();
 		Color[][] colors = new Color[pixels.length][pixels[0].length];
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if (row > glitchness-1 && col > glitchness-1 && row < (pixels.length - glitchness) && col < (pixels[0].length - glitchness))
-				{
-					Color avgAgcentPixelColor = new Color(getSurroundingPixelAvg(glitchness, row, col));
-					int newRgb = ((pixels[row][col].getColor().getRGB() * 99) + avgAgcentPixelColor.getRGB()) / 100;
-					Color newColor = new Color(newRgb);
-					colors[row][col] = newColor;
-				} else 
-				{
-					colors[row][col] = pixels[row][col].getColor();
-				}
+				Color avgAgcentPixelColor = getSurroundingPixelAvg(glitchness, row, col);
+				int newRed = ((pixels[row][col].getColor().getRed() * major) + avgAgcentPixelColor.getRed()*minor) /100;
+				int newGreen = ((pixels[row][col].getColor().getGreen() * major) + avgAgcentPixelColor.getGreen()*minor) /100;
+				int newBlue = ((pixels[row][col].getColor().getBlue() * major) + avgAgcentPixelColor.getBlue()*minor) /100;
+				Color newColor = new Color(newRed, newGreen, newBlue);
+				colors[row][col] = newColor;
 			}
 
 		}
@@ -255,23 +263,33 @@ public class Picture extends SimplePicture
 		}
 	}
 
-	private int getSurroundingPixelAvg(int radius, int row, int col)
+	private Color getSurroundingPixelAvg(int radius, int row, int col)
 	{
 		int startRow = row - radius;
 		int startCol = col - radius;
 		int endRow = row + radius + 1;
 		int endCol = col + radius + 1;
 		int totalRuns = 0;
-		int totalColor = 0;
+		int totalRed = 0;
+		int totalBlue = 0;
+		int totalGreen = 0;
 		for (int r = startRow; r < endRow; r++)
 		{
 			for (int c = startCol; c < endCol; c++)
 			{
-				totalColor += pixels[r][c].getColor().getRGB();
-				totalRuns++;
+				if (r >= 0 && c >= 0 && r < (pixels.length) && c < (pixels[0].length))
+				{
+					totalRed += pixels[r][c].getColor().getRed();
+					totalGreen += pixels[r][c].getColor().getGreen();
+					totalBlue += pixels[r][c].getColor().getBlue();
+					totalRuns++;
+				}
 			}
 		}
-		return totalColor / totalRuns;
+		totalRed = totalRed / totalRuns;
+		totalGreen = totalGreen / totalRuns;
+		totalBlue = totalBlue / totalRuns;
+		return new Color(totalRed, totalGreen, totalBlue);
 	}
 
 	public void mirrorDiagonalRightTopToBottom()
@@ -418,7 +436,7 @@ public class Picture extends SimplePicture
 				Color rgbPlus = new Color((color1.getRed() + rgbAdder), (color1.getGreen() + rgbAdder), (color1.getBlue() + rgbAdder));
 				Color rgbMinus = new Color((color1.getRed() - rgbAdder), (color1.getGreen() - rgbAdder), (color1.getBlue() - rgbAdder));
 				if (rgbMinus.getRed() < color.getRed() && rgbMinus.getGreen() < color.getGreen() && rgbMinus.getBlue() < color.getBlue() && rgbPlus.getRed() > color.getRed()
-				        && rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
+						&& rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
 
 				{
 					isInColorRange = true;
