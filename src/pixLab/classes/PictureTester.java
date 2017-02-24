@@ -11,6 +11,7 @@ import java.awt.Color;
  */
 public class PictureTester
 {
+	private static int fail = 0;
 	/** Method to test zeroBlue */
 	public static void testZeroBlue()
 	{
@@ -174,8 +175,32 @@ public class PictureTester
 		// testGetAverageForColumn(0);
 		// testMirrorVerticalRightToLeft();
 		// testCollage1();
-		// testMeme();
-		testGlitch();
+		
+		//testGlitch();
+		testJacob();
+		//testMeme();
+	}
+
+	private static void testJacob()
+	{
+	Picture pic = new Picture();
+	String dankString = pic.makeDank(500);
+	if(dankString.contains("dank"))
+	{
+		System.out.println(dankString+" After " + fail+" Fails");
+	}
+	else
+	{
+		fail++;
+		System.out.println(fail);
+		try{
+		testJacob();}
+		catch(StackOverflowError e)
+		{
+			//System.out.println("fail");
+			testJacob();
+		}
+	}
 	}
 
 	private static void testMeme()
@@ -183,7 +208,7 @@ public class PictureTester
 		Picture swan = new Picture("640X480.jpg");
 		swan.coolage();
 
-		swan.makeMeme("Valantines is fun so this is a swan meme cause valintines", "Thats all i got you may go now. Really the meme is over, what are you still doing here go!", new Color(200, 0, 150),
+		swan.makeMemeRainbowTxt(swan.makeDank(350), swan.makeDank(22),
 		        "Giddyup Std", 30, "DankMeme.jpg");
 		swan.explore();
 	}

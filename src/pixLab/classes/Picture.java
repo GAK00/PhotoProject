@@ -251,6 +251,7 @@ public class Picture extends SimplePicture
 				int newBlue = ((pixels[row][col].getColor().getBlue() * major) + avgAgcentPixelColor.getBlue()*minor) /100;
 				Color newColor = new Color(newRed, newGreen, newBlue);
 				colors[row][col] = newColor;
+
 			}
 
 		}
@@ -826,7 +827,26 @@ public class Picture extends SimplePicture
 			e.printStackTrace();
 		}
 	}
-
+	public void makeMemeRainbowTxt(String topText, String botText, String font, int size, String name)
+	{
+		try
+		{
+			int red = (int)(Math.random()*255);
+			int green = (int)(Math.random()*255);
+			int blue = (int)(Math.random()*255);
+			Color color = new Color(red,green,blue);
+			this.addMessage(topText, this.getWidth() / 2, 0, font, Font.BOLD, color, size, true);
+			red = (int)(Math.random()*255);
+			green = (int)(Math.random()*255);
+			blue = (int)(Math.random()*255);
+			color = new Color(red,green,blue);
+			this.addMessage(botText, this.getWidth() / 2, 0, font, Font.BOLD, color, size, false);
+			this.write(name);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	/*
 	 * Main method for testing - each class in Java can have a main method
 	 */
@@ -836,6 +856,62 @@ public class Picture extends SimplePicture
 		beach.explore();
 		beach.zeroBlue();
 		beach.explore();
+	}
+
+	public String makeDank(int size)
+	{
+		if (size < 0)
+		{
+			size = 1;
+		}
+		String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"," " };
+		String[] dankArray = new String[size];
+		if (size >= alphabet.length)
+		{
+			return(makeDank(alphabet.length-1)+makeDank(size-(alphabet.length)+1));
+		}
+		if (size < 0)
+		{
+			size = 1;
+		}
+		for (int index = 0; index < dankArray.length; index++)
+		{
+			int rand = (int) (Math.random() * alphabet.length);
+			dankArray[index] = alphabet[rand];
+		}
+		for (int index = 0; index < dankArray.length; index++)
+		{
+			boolean isUnique = false;
+			while (!isUnique)
+			{
+				isUnique = true;
+				for (int index2 = 0; index2 < dankArray.length; index2++)
+				{
+
+					if (index == index2)
+					{
+
+					} else if (dankArray[index].equals(dankArray[index2]))
+					{
+						int rand = (int) (Math.random() * alphabet.length);
+						dankArray[index] = alphabet[rand];
+						isUnique = false;
+					}
+				}
+			}
+		}
+		String dankString = "";
+		for (int index = 0; index < dankArray.length; index++)
+		{
+			dankString += dankArray[index];
+		}
+
+		if (dankString.equals("dank"))
+		{
+			System.out.println("OH BABY A TRIPLE!");
+		}
+
+		return dankString;
 	}
 
 } // this } is the end of class Picture, put all new methods before this
