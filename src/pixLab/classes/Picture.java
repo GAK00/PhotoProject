@@ -3,6 +3,7 @@ package pixLab.classes;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -107,6 +108,248 @@ public class Picture extends SimplePicture
 			{
 				pixelObj.setBlue(0);
 			}
+		}
+	}
+
+	private Color getMostCommonColor()
+	{
+		ArrayList<Color> colors = new ArrayList<Color>();
+		ArrayList<Integer> uses = new ArrayList<Integer>();
+		Pixel[][] pixels = this.getPixels2D();
+		for(int row = 0; row < pixels.length; row++)
+		{
+			for(int col = 0; col < pixels[0].length; col++)
+			{
+				Color color = pixels[row][col].getColor();
+				if(colors.contains(color))
+				{
+					int index = colors.indexOf(color);
+					uses.set(index, uses.get(index)+1);
+				}
+				else
+				{
+					colors.add(color);
+					uses.add(1);
+				}
+			}
+		}
+		int maxUses = uses.get(0);
+		int maxIndex = 0;
+		for(int index = 1; index < uses.size(); index++)
+		{
+			if(maxUses<uses.get(index))
+			{
+				maxUses = uses.get(index);
+				maxIndex = index;
+			}
+		}
+		return colors.get(maxIndex);
+	}
+	public void greenScreen(Picture overlay) throws Exception
+	{
+		greenScreen(50, overlay);
+	}
+	public void greenScreen(int tolorence, Picture overlay) throws Exception
+	{
+		Color color = getMostCommonColor();
+		System.out.println("MostCommonColor: " + color);
+		greenScreen(color,tolorence,overlay);
+	}
+	public void greenScreen(Color color, int  tolarence, Picture overlay) throws Exception
+	{
+		Pixel[][] greenScreenPixels = this.getPixels2D();
+		Pixel[][] overlayPixels = overlay.getPixels2D();
+		if(greenScreenPixels.length == overlayPixels.length && greenScreenPixels[0].length == overlayPixels[0].length)
+		{
+			for(int row = 0; row < greenScreenPixels.length; row++)
+			{
+				for(int col = 0; col < greenScreenPixels[0].length; col++)
+				{
+					Color currentColor = overlayPixels[row][col].getColor();
+					if(greenScreenPixels[row][col].colorDistance(color)<=tolarence)
+					{
+						System.out.println("Setting color");
+						greenScreenPixels[row][col].setColor(currentColor);
+					}
+				}
+			}
+		}
+		else
+		{
+			throw new Exception("Picture sizes must match");
+		}
+	}
+	public void stigonorgrophy(Picture toStigPic) throws Exception
+	{
+		Pixel[][] unStig = this.getPixels2D();
+		Pixel[][] toStig = toStigPic.getPixels2D();
+		if (toStig.length == unStig.length && toStig[0].length == unStig[0].length)
+		{
+			for (int row = 0; row < toStig.length; row++)
+			{
+				int toRow = getIndex(row, 0, toStig.length, 0)[0];
+				if (toRow < 0)
+				{
+					toRow = toStig.length - 1 + toRow;
+				}
+				for (int col = 0; col < toStig[0].length; col++)
+				{
+					int toCol = getIndex(0, col, 0, toStig[0].length)[1];
+					if (toCol < 0)
+					{
+						toCol = toStig[0].length - 1 + toCol;
+					}
+
+					System.out.println(toRow + "," + toCol);
+					Pixel fromPixel = toStig[row][col];
+
+					Pixel toPixel = unStig[toRow][toCol];
+					int red = numberify((fromPixel.getGreen() / 32) + toPixel.getRed() - 15);
+
+					int green = numberify((fromPixel.getBlue() / 32) + toPixel.getGreen() - 15);
+					int blue = numberify((fromPixel.getRed() / 32) + toPixel.getBlue() - 15);
+					Color newColor = new Color(red, green, blue);
+					unStig[toRow][toCol].setColor(newColor);
+				}
+			}
+		} else
+		{
+			throw new Exception("Picture sizes must match!!");
+		}
+	}
+
+	private int numberify(int number)
+	{
+		if (number >= 255)
+		{
+
+			if (number > 300)
+			{
+				number = 254;
+			} else
+			{
+				number = 254 + (((number % 2) * 2) - 254);
+			}
+
+		}
+		if (number <= 0)
+		{
+			if (number < -100)
+			{
+				number = 0;
+			} else
+			{
+				number = Math.abs(number);
+				number = number / 2;
+				number = number * 2;
+			}
+		} else if (number % 2 == 0)
+		{
+			number = number + 1;
+		}
+		return number;
+	}
+
+	private int unNumberify(int number)
+	{
+		if (number % 2 != 0)
+		{
+			return number;
+		} else
+		{
+			if (number < 100)
+			{
+				return number * -1;
+			} else if (number == 0)
+			{
+				return -100;
+			} else if (number > 208)
+			{
+				number = 254 + (254 - number);
+			} else if (number == 254)
+			{
+				return 240;
+			} else
+			{
+				return 0;
+			}
+		}
+		return number;
+	}
+
+	private int[] getIndex(int x, int y, int mX, int mY)
+	{
+		mX--;
+		mY--;
+		int[] newIndex = new int[2];
+		if (x % 2 == 0 || x == 0)
+		{
+			newIndex[0] = mX - (x / 2);
+		} else
+		{
+			newIndex[0] = x / 2;
+		}
+		if (y % 2 == 0 || y == 0)
+		{
+			newIndex[1] = mY - (y / 2);
+		} else
+		{
+			newIndex[1] = y / 2;
+		}
+
+		return newIndex;
+	}
+
+	public void unstigonorgrophy(Picture toStigPic) throws Exception
+	{
+		Pixel[][] unStig = this.getPixels2D();
+		Pixel[][] toStig = toStigPic.getPixels2D();
+		Color[][] colors = new Color[toStig.length][toStig[0].length];
+		if (toStig.length == unStig.length && toStig[0].length == unStig[0].length)
+		{
+			for (int row = 0; row < toStig.length; row++)
+			{
+				int toRow = getIndex(row, 0, toStig.length, 0)[0];
+				if (toRow < 0)
+				{
+					toRow = toStig.length - 1 + toRow;
+				}
+				for (int col = 0; col < toStig[0].length; col++)
+				{
+					int toCol = getIndex(0, col, 0, toStig[0].length)[1];
+
+					Pixel fromPixel = toStig[toRow][toCol];
+
+					Pixel toPixel = unStig[toRow][toCol];
+					int red = ((unNumberify(toPixel.getBlue()) + 15) - fromPixel.getBlue()) * 32;
+					int green = ((unNumberify(toPixel.getRed()) + 15) - fromPixel.getRed()) * 32;
+					int blue = ((unNumberify(toPixel.getGreen()) + 15) - fromPixel.getGreen()) * 32;
+					int[] color = new int[] { red, green, blue };
+					for (int index = 0; index < 3; index++)
+					{
+						if (color[index] > 255)
+						{
+							color[index] = 255;
+						}
+						if(color[index]<0)
+						{
+							color[index] = 0;
+						}
+					}
+					Color newColor = new Color(color[0], color[1], color[2]);
+					colors[row][col] = newColor;
+				}
+			}
+			for (int row = 0; row < toStig.length; row++)
+			{
+				for (int col = 0; col < toStig[0].length; col++)
+				{
+					unStig[row][col].setColor(colors[row][col]);
+				}
+			}
+		} else
+		{
+			throw new Exception("Picture sizes must match!!");
 		}
 	}
 
@@ -230,15 +473,15 @@ public class Picture extends SimplePicture
 		}
 	}
 
-	public void Glitch(int glitchness,double ratio)
+	public void Glitch(int glitchness, double ratio)
 	{
-		int major = (int)(ratio*100);
-		if(major>100||major<0)
+		int major = (int) (ratio * 100);
+		if (major > 100 || major < 0)
 		{
 			major = 100;
 		}
-		int minor = 100-major;
-		System.out.println(major +" , "+minor);
+		int minor = 100 - major;
+		System.out.println(major + " , " + minor);
 		Pixel[][] pixels = this.getPixels2D();
 		Color[][] colors = new Color[pixels.length][pixels[0].length];
 		for (int row = 0; row < pixels.length; row++)
@@ -246,9 +489,9 @@ public class Picture extends SimplePicture
 			for (int col = 0; col < pixels[0].length; col++)
 			{
 				Color avgAgcentPixelColor = getSurroundingPixelAvg(glitchness, row, col);
-				int newRed = ((pixels[row][col].getColor().getRed() * major) + avgAgcentPixelColor.getRed()*minor) /100;
-				int newGreen = ((pixels[row][col].getColor().getGreen() * major) + avgAgcentPixelColor.getGreen()*minor) /100;
-				int newBlue = ((pixels[row][col].getColor().getBlue() * major) + avgAgcentPixelColor.getBlue()*minor) /100;
+				int newRed = ((pixels[row][col].getColor().getRed() * major) + avgAgcentPixelColor.getRed() * minor) / 100;
+				int newGreen = ((pixels[row][col].getColor().getGreen() * major) + avgAgcentPixelColor.getGreen() * minor) / 100;
+				int newBlue = ((pixels[row][col].getColor().getBlue() * major) + avgAgcentPixelColor.getBlue() * minor) / 100;
 				Color newColor = new Color(newRed, newGreen, newBlue);
 				colors[row][col] = newColor;
 
@@ -436,8 +679,7 @@ public class Picture extends SimplePicture
 				Color color1 = new Color(colorRange[index]);
 				Color rgbPlus = new Color((color1.getRed() + rgbAdder), (color1.getGreen() + rgbAdder), (color1.getBlue() + rgbAdder));
 				Color rgbMinus = new Color((color1.getRed() - rgbAdder), (color1.getGreen() - rgbAdder), (color1.getBlue() - rgbAdder));
-				if (rgbMinus.getRed() < color.getRed() && rgbMinus.getGreen() < color.getGreen() && rgbMinus.getBlue() < color.getBlue() && rgbPlus.getRed() > color.getRed()
-						&& rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
+				if (rgbMinus.getRed() < color.getRed() && rgbMinus.getGreen() < color.getGreen() && rgbMinus.getBlue() < color.getBlue() && rgbPlus.getRed() > color.getRed() && rgbPlus.getGreen() > color.getGreen() && rgbPlus.getBlue() > color.getBlue())
 
 				{
 					isInColorRange = true;
@@ -827,19 +1069,20 @@ public class Picture extends SimplePicture
 			e.printStackTrace();
 		}
 	}
+
 	public void makeMemeRainbowTxt(String topText, String botText, String font, int size, String name)
 	{
 		try
 		{
-			int red = (int)(Math.random()*255);
-			int green = (int)(Math.random()*255);
-			int blue = (int)(Math.random()*255);
-			Color color = new Color(red,green,blue);
+			int red = (int) (Math.random() * 255);
+			int green = (int) (Math.random() * 255);
+			int blue = (int) (Math.random() * 255);
+			Color color = new Color(red, green, blue);
 			this.addMessage(topText, this.getWidth() / 2, 0, font, Font.BOLD, color, size, true);
-			red = (int)(Math.random()*255);
-			green = (int)(Math.random()*255);
-			blue = (int)(Math.random()*255);
-			color = new Color(red,green,blue);
+			red = (int) (Math.random() * 255);
+			green = (int) (Math.random() * 255);
+			blue = (int) (Math.random() * 255);
+			color = new Color(red, green, blue);
 			this.addMessage(botText, this.getWidth() / 2, 0, font, Font.BOLD, color, size, false);
 			this.write(name);
 		} catch (Exception e)
@@ -847,6 +1090,7 @@ public class Picture extends SimplePicture
 			e.printStackTrace();
 		}
 	}
+
 	/*
 	 * Main method for testing - each class in Java can have a main method
 	 */
@@ -864,11 +1108,11 @@ public class Picture extends SimplePicture
 		{
 			size = 1;
 		}
-		String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"," " };
+		String[] alphabet = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", " " };
 		String[] dankArray = new String[size];
 		if (size >= alphabet.length)
 		{
-			return(makeDank(alphabet.length-1)+makeDank(size-(alphabet.length)+1));
+			return (makeDank(alphabet.length - 1) + makeDank(size - (alphabet.length) + 1));
 		}
 		if (size < 0)
 		{

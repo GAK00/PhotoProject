@@ -177,7 +177,9 @@ public class PictureTester
 		// testCollage1();
 		
 		//testGlitch();
-		testJacob();
+		//testStig();
+		testGreenScreen();
+		//testJacob();
 		//testMeme();
 	}
 
@@ -248,9 +250,58 @@ public class PictureTester
 	{
 		Picture toGlitch = new Picture("swan.jpg");
 		toGlitch.goDerp();
-		for(int x =0;x<1;x++){
-		toGlitch.Glitch(7,0.15);}
+		toGlitch.goDerp();
+		for(int x =0;x<2;x++){
+		toGlitch.Glitch(5,0.25);}
 		
 		toGlitch.explore();
+		toGlitch.write("GeranGlitch.jpg");
 	}
-}
+	public static void testStig()
+	{
+		Picture hide = new Picture("beach.jpg");
+		Picture toStig = new Picture("blueMotorcycle.jpg");
+		hide.explore();
+		try
+		{
+			hide.stigonorgrophy(toStig);
+//			for(int index = 0; index<10;index++){
+//			hide.stigonorgrophy(hide);}
+		
+			hide.explore();
+			hide.unstigonorgrophy(new Picture("beach.jpg"));
+//			for(int index = 0; index<10;index++){
+//			hide.unstigonorgrophy(new Picture("redMotorcycle.jpg"));}
+			hide.explore();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	
+	}
+	public static void testGreenScreen()
+	{
+		Picture greenScreen = new Picture("wtf.jpg");
+		Picture stig = new Picture("wtf.jpg");
+		Picture picture = new Picture("wtf.jpg");
+		Picture overlay = new Picture("redMotorCycle.jpg");
+		greenScreen.explore();
+		try
+		{
+			//greenScreen.stigonorgrophy(stig);
+			greenScreen.greenScreen(100,overlay);
+			//greenScreen.unstigonorgrophy(new Picture("redMotorcycle.jpg"));
+			stig.stigonorgrophy(greenScreen);
+			stig.write("Dank.jpg");
+			stig.explore();
+			
+			stig.unstigonorgrophy(new Picture("beach.jpg"));
+			
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		stig.explore();
+	}
+	}
